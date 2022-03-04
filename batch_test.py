@@ -12,25 +12,31 @@ from inpaint_model import InpaintCAModel
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
-    '--flist', default='', type=str,
+    '--flist', default='data/images.flist', type=str,
     help='The filenames of image to be processed: input, mask, output.')
 parser.add_argument(
-    '--image_height', default=-1, type=int,
+    '--masks', default='data/masks.flist', type=str,
+    help='The filenames of image to be processed: input, mask, output.')
+parser.add_argument(
+    '--out', default='data/out.flist', type=str,
+    help='The filenames of image to be processed: input, mask, output.')
+parser.add_argument(
+    '--image_height', default=256, type=int,
     help='The height of images should be defined, otherwise batch mode is not'
     ' supported.')
 parser.add_argument(
-    '--image_width', default=-1, type=int,
+    '--image_width', default=256, type=int,
     help='The width of images should be defined, otherwise batch mode is not'
     ' supported.')
 parser.add_argument(
-    '--checkpoint_dir', default='', type=str,
+    '--checkpoint_dir', default='logs/facescape', type=str,
     help='The directory of tensorflow checkpoint.')
 
 
 if __name__ == "__main__":
     FLAGS = ng.Config('inpaint.yml')
-    ng.get_gpus(1)
-    # os.environ['CUDA_VISIBLE_DEVICES'] =''
+    # ng.get_gpus(1)
+    os.environ['CUDA_VISIBLE_DEVICES'] ='0'
     args = parser.parse_args()
 
     sess_config = tf.ConfigProto()
@@ -57,10 +63,17 @@ if __name__ == "__main__":
 
     with open(args.flist, 'r') as f:
         lines = f.read().splitlines()
+    with open(args.masks, 'r') as f:
+        mlines = f.read().splitlines()
+    with open(args.out, 'r') as f:
+        olines = f.read().splitlines()
     t = time.time()
-    for line in lines:
+    for i in range(len(lines)):
     # for i in range(100):
-        image, mask, out = line.split()
+        # image, mask, out = line.split()
+        image = lines[i]
+        mask = mlines[i]
+        out = olines[i]
         base = os.path.basename(mask)
 
         image = cv2.imread(image)
