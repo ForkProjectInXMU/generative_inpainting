@@ -29,7 +29,7 @@ parser.add_argument(
     help='The width of images should be defined, otherwise batch mode is not'
     ' supported.')
 parser.add_argument(
-    '--checkpoint_dir', default='logs/facescape', type=str,
+    '--checkpoint_dir', default='logs/facescape_backup/snap-32000', type=str,
     help='The directory of tensorflow checkpoint.')
 
 
@@ -51,12 +51,18 @@ if __name__ == "__main__":
     output = tf.reverse(output, [-1])
     output = tf.saturate_cast(output, tf.uint8)
     vars_list = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES)
+    # print(tf.GraphKeys.GLOBAL_VARIABLES)
+    # print(vars_list)
+    # input()
     assign_ops = []
     for var in vars_list:
         vname = var.name
         from_name = vname
+        # print(from_name)
         var_value = tf.contrib.framework.load_variable(
             args.checkpoint_dir, from_name)
+        # print(var_value)
+        # input()
         assign_ops.append(tf.assign(var, var_value))
     sess.run(assign_ops)
     print('Model loaded.')

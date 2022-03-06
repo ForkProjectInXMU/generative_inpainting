@@ -8,7 +8,7 @@ gpu_type: 'nvidia-tesla-p100'
 
 # parameters
 name: DFv2  # any name
-model_restore: ''  # logs/places2_gated_conv
+model_restore: 'logs/facescape'  # logs/places2_gated_conv
 dataset: 'facescape'  # 'tmnist', 'dtd', 'places2', 'celeba', 'imagenet', 'cityscapes'
 random_crop: False  # Set to false when dataset is 'celebahq', meaning only resize the images to img_shapes, instead of crop img_shapes from a larger raw image. This is useful when you train on images with different resolutions like places2. In these cases, please set random_crop to true.
 val: True  # true if you want to view validation results in tensorboard
@@ -23,9 +23,9 @@ padding: 'SAME'
 
 # training
 train_spe: 2000
-max_iters: 1000000
+max_iters: 200000
 viz_max_out: 10
-val_psteps: 200
+val_psteps: 100
 
 # data
 data_flist:
@@ -73,4 +73,3 @@ l1_loss_alpha: 1.
 guided: False
 edge_threshold: 0.6
 
-restore_model: log/facescape
